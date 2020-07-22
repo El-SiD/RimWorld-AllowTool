@@ -23,13 +23,14 @@ namespace AllowTool {
 			defaultLabel = "PartyHuntToggle_label".Translate();
 			defaultDesc = "PartyHuntToggle_desc".Translate();
 			isActive = () => WorldSettings.PawnIsPartyHunting(pawn);
-			toggleAction = ToggleAction;
+			toggleAction = () => ToggleAction(pawn);
 			hotKey = KeyBindingDefOf.Misc9;
 			disabledReason = TryGetDisabledReason(pawn);
 			disabled = disabledReason != null;
 		}
 
-		private void ToggleAction() {
+		// Hook for Multiplayer
+		internal static void ToggleAction(Pawn pawn) {
 			WorldSettings.TogglePawnPartyHunting(pawn, !WorldSettings.PawnIsPartyHunting(pawn));
 		}
 
@@ -49,12 +50,23 @@ namespace AllowTool {
 		public override IEnumerable<FloatMenuOption> RightClickFloatMenuOptions {
 			get {
 				yield return AllowToolUtility.MakeCheckmarkOption("setting_partyHuntFinish_label", null, 
-					() => WorldSettings.AutoFinishOff, b => WorldSettings.AutoFinishOff = b);
+					() => WorldSettings.AutoFinishOff, SetAutoFinishOff);
 				yield return AllowToolUtility.MakeCheckmarkOption("setting_partyHuntDesignated_label", null, 
-					() => WorldSettings.HuntDesignatedOnly, b => WorldSettings.HuntDesignatedOnly = b);
+					() => WorldSettings.HuntDesignatedOnly, SetHuntDesignatedOnly);
 				yield return AllowToolUtility.MakeCheckmarkOption("setting_partyHuntUnforbid_label", null, 
-					() => WorldSettings.UnforbidDrops, b => WorldSettings.UnforbidDrops = b);
+					() => WorldSettings.UnforbidDrops, SetUnforbidDrops);
 			}
+		}
+
+		// Hooks for Multiplayer
+		internal static void SetAutoFinishOff(bool b) {
+			WorldSettings.AutoFinishOff = b;
+		}
+		internal static void SetHuntDesignatedOnly(bool b) {
+			WorldSettings.HuntDesignatedOnly = b;
+		}
+		internal static void SetUnforbidDrops(bool b) {
+			WorldSettings.UnforbidDrops = b;
 		}
 
 		private string TryGetDisabledReason(Pawn forPawn) {
