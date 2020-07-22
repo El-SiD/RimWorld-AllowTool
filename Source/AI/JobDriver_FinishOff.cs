@@ -106,7 +106,7 @@ namespace AllowTool {
 			}
 		}
 
-		private Thing TryMakeSkullMote(Pawn victim, float chance) {
+		internal Thing TryMakeSkullMote(Pawn victim, float chance) {
 			if (victim?.RaceProps != null && victim.RaceProps.intelligence == Intelligence.Humanlike) {
 				if (Rand.Chance(chance)) {
 					var def = ThingDefOf.Mote_ThoughtGood;

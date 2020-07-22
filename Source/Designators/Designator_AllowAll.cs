@@ -27,7 +27,8 @@ namespace AllowTool {
 			return false;
 		}
 
-		private void AllowAllTheThings() {
+		// Hook for Multiplayer
+		internal void AllowAllTheThings() {
 			var includeRotten = HugsLibUtility.ShiftIsHeld;
 			var includeNonHaulable = HugsLibUtility.ControlIsHeld;
 			var map = Find.CurrentMap;

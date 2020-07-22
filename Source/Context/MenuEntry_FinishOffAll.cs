@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using System.Linq;
+using RimWorld;
 using Verse;
 
 namespace AllowTool.Context {
@@ -8,17 +9,15 @@ namespace AllowTool.Context {
 		protected override ThingRequestGroup DesignationRequestGroup => ThingRequestGroup.Pawn;
 
 		public override ActivationResult Activate(Designator designator, Map map) {
-			int hitCount = 0;
-			bool friendliesFound = false;
-			foreach (var thing in map.listerThings.ThingsInGroup(DesignationRequestGroup)) {
-				if (ThingIsValidForDesignation(thing) && designator.CanDesignateThing(thing).Accepted) {
-					designator.DesignateThing(thing);
-					hitCount++;
-					if (AllowToolUtility.PawnIsFriendly(thing)) {
-						friendliesFound = true;
-					}
-				}
-			}
+			var things = map.listerThings.ThingsInGroup(DesignationRequestGroup)
+				.Where(thing => ThingIsValidForDesignation(thing) && designator.CanDesignateThing(thing).Accepted)
+				.ToList();
+
+			DesignateThings(designator, map, things);
+
+			int hitCount = things.Count;
+			bool friendliesFound = things.Any(thing => AllowToolUtility.PawnIsFriendly(thing));
+
 			if (hitCount>0 && friendliesFound) {
 				Messages.Message("Designator_context_finish_allies".Translate(hitCount), MessageTypeDefOf.CautionInput);
 			}

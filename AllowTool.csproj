@@ -68,6 +68,9 @@
       <HintPath>..\RimworldManaged\UnityEngine.TextRenderingModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="RimWorld.MultiplayerAPI">
+      <HintPath>..\packages\RimWorld.MultiplayerAPI.0.2.0\lib\net472\0MultiplayerAPI.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -146,6 +149,8 @@
     <Compile Include="Source\Utils\UnlimitedAreaDragger.cs" />
     <Compile Include="Source\Designators\ThingDesignatorDef.cs" />
     <Compile Include="Source\AI\WorkGiver_HaulUrgently.cs" />
+    <Compile Include="Source\Context\RemoveDesignationBaseContextMenuEntry.cs" />
+    <Compile Include="Source\Handlers\MultiplayerHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
