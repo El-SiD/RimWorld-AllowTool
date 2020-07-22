@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using HugsLib.Settings;
 using UnityEngine;
 using Verse;
@@ -54,15 +56,28 @@ namespace AllowTool.Context {
 			return ActivationResult.FromCount(hitCount, BaseMessageKey);
 		}
 
-		protected int DesignateAllThings(Designator designator, Map map, Predicate<Thing> thingFilter) {
-			int hitCount = 0;
-			foreach (var thing in map.listerThings.ThingsInGroup(DesignationRequestGroup)) {
-				if (ThingIsValidForDesignation(thing) && (thingFilter == null || thingFilter(thing)) && designator.CanDesignateThing(thing).Accepted) {
-					designator.DesignateThing(thing);
-					hitCount++;
-				}
+		protected int DesignateAllThings(Designator designator, Map map, Predicate<Thing> thingFilter = null) {
+			var things = map.listerThings.ThingsInGroup(DesignationRequestGroup).Where(
+				thing => ThingIsValidForDesignation(thing)
+					&& designator.CanDesignateThing(thing).Accepted
+					&& (thingFilter == null || thingFilter(thing))
+			).ToList();
+
+			DesignateThings(designator, map, things);
+
+			return things.Count;
+		}
+
+		// Hook for Multiplayer
+		internal void DesignateThings(Designator designator, Map map, List<Thing> things) {
+			foreach (var thing in things) {
+				DesignateThing(designator, map, thing);
 			}
-			return hitCount;
+		}
+
+		// Can be overriden to change the default
+		protected virtual void DesignateThing(Designator designator, Map map, Thing thing) {
+			designator.DesignateThing(thing);
 		}
 
 		protected int DesignateAllThingsInHomeArea(Designator designator, Map map) {

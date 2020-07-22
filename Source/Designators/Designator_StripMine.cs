@@ -80,7 +80,8 @@ namespace AllowTool {
 			highlighter.ClearCachedCells();
 		}
 
-		private void DesignateCells(IEnumerable<IntVec3> targetCells) {
+		// Hook for Multiplayer
+		internal void DesignateCells(IEnumerable<IntVec3> targetCells) {
 			var currentCell = IntVec3.Invalid;
 			try {
 				var map = Find.CurrentMap;

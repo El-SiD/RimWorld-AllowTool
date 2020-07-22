@@ -18,9 +18,14 @@ namespace AllowTool {
 		protected override void FinalizeDesignationSucceeded() {
 			base.FinalizeDesignationSucceeded();
 			if (HugsLibUtility.ShiftIsHeld) {
-				foreach (var colonist in Find.CurrentMap.mapPawns.FreeColonists) {
-					colonist.jobs.CheckForJobOverride();
-				}
+				CheckForJobOverride();
+			}
+		}
+
+		// Hook for Multiplayer
+		internal void CheckForJobOverride() {
+			foreach (var colonist in Find.CurrentMap.mapPawns.FreeColonists) {
+				colonist.jobs.CheckForJobOverride();
 			}
 		}
 
